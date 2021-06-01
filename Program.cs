@@ -11,8 +11,18 @@ namespace ZTEModem
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("----------------------");
             Console.ResetColor();
-            Console.WriteLine("> Loading Configuration...");
+            Console.WriteLine("> Loading configuration...");
 
+            var donotask = false;
+            foreach (string arg in args)
+            {
+                if (string.IsNullOrWhiteSpace(arg)) continue;
+                if (arg.ToLower() == "/f")
+                {
+                    donotask = true;
+                    break;
+                }
+            }
             var cm = new ConfigManager();
 
             Console.Write("  Router   : ");
@@ -68,8 +78,8 @@ namespace ZTEModem
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.Write("> Reboot the device? [Y/n] : ");
             Console.ResetColor();
-            var todo = Console.ReadKey();
-            if (todo.Key == ConsoleKey.Y || todo.Key == ConsoleKey.Enter)
+            var todo = donotask ? ConsoleKey.Y : Console.ReadKey().Key;
+            if (todo == ConsoleKey.Y || todo == ConsoleKey.Enter)
             {
                 Console.SetCursorPosition(0, Console.CursorTop);
                 Console.WriteLine("> Rebooting device...           ");
